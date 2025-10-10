@@ -1,0 +1,22 @@
+<%- include("partials/header.ejs") %>
+<form method="post" action="/register">
+      <label for="name">Name</label>
+      <input required  type="text" name="name">
+
+      <label for="email">email</label>
+      <input required type="email" name="email">
+
+      <label for="password">Password</label>
+      <input required type="password" name="password">
+
+      <label for="confirm-password">Confirm-password</label>
+      <input required type="password"name="confirm-password">
+
+      <button>Register</button>
+</form>
+
+<form action="/login" method="get">
+      <button>login</button>
+</form>
+      
+<%- include("partials/footer.ejs") %>
