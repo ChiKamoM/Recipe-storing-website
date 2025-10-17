@@ -1,4 +1,22 @@
 <%- include("partials/header.ejs") %>
-<h1>hello, World</h1>
-      
+<form method="post" action="/new-recipe">
+      <div class="ingredients">
+            <h2>input ingredients below</h2>
+            <label for="ingredient">Put indgredient in left box and quantity on right</label>
+            <input type="te xt" placeholder="Ingredient name" name  ingredient>
+            <input type="text" name="quantiy">
+            <button type="button">Add ingredient</button>
+      </div>
+      <h2>Input step by step instructions</h2>
+      <div>
+     <label for="step">List the steps below</label>   
+     <input type="text" name="step" >
+     <button type="button">Add instruction</button>    
+      </div>
+</form>
+   
+<script>
+
+</script>
+
 <%- include("partials/footer.ejs") %>

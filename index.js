@@ -4,6 +4,7 @@ import pg from "pg";
 import 'dotenv/config';
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
+import e from "express";
 
 
 const app = express()
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended:true }));
 
 
 let loggedIn = false;
+let currentUser
 
 app.listen(port, ()=>{
       console.log(`app running on localhost:${port}`)
@@ -64,4 +66,34 @@ app.post("/register", async (req,res)=>{
 
 app.get("/login", (req,res)=>{
       res.render("login.ejs")
+})
+
+app.post("/login", async (req,res)=>{
+    
+      try {
+            const {email, password} = req.body;
+            let result = await db.query("SELECT * FROM users WHERE email = $1",[email])
+            const user = result.rows[0];
+            if(result.rows.length > 0){
+                  bcrypt.compare(password,user.password, (err, res)=>{
+                        if(err){
+                              console.log("Error comparing password", err)
+                        } else{
+                              if(res){
+                                    loggedIn = true
+                                    currentUser = user.id
+                                    res.redirect("/")
+                              }else{
+                                    res.send("incorrect password")
+                              }
+                        }
+                  })
+            }else{
+                  res.send("user not found")
+            }     
+      } catch (error) {
+        console.log(error)      
+      }
+
+
 })
