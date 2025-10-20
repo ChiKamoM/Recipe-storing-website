@@ -4,7 +4,7 @@ import pg from "pg";
 import 'dotenv/config';
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
-import e from "express";
+
 
 
 const app = express()
@@ -52,7 +52,7 @@ app.post("/register", async (req,res)=>{
             result = await db.query("INSERT INTO users (uuid,name,email,password) VALUES ($1,$2,$3,$4)",[uuid,name,email,hash])
             console.log(result)
             loggedIn = true;
-            res.redirect("/");
+            res.render("login.ejs");
          } else{
             res.send("user already exists. Try logging in")
          }
@@ -75,11 +75,11 @@ app.post("/login", async (req,res)=>{
             let result = await db.query("SELECT * FROM users WHERE email = $1",[email])
             const user = result.rows[0];
             if(result.rows.length > 0){
-                  bcrypt.compare(password,user.password, (err, res)=>{
+                  bcrypt.compare(password,user.password, (err, check)=>{
                         if(err){
                               console.log("Error comparing password", err)
                         } else{
-                              if(res){
+                              if(check){
                                     loggedIn = true
                                     currentUser = user.id
                                     res.redirect("/")
@@ -96,4 +96,12 @@ app.post("/login", async (req,res)=>{
       }
 
 
+})
+
+app.post("/new-recipe", async (req,res)=>{
+      console.log(req.body);
+      let {name,type,ingredients, quantitiy,steps} = req.body
+
+      let result = await db.query ("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES ($1,$2,$3)",[name,currentUser,type])
+      res.redirect("/")
 })
