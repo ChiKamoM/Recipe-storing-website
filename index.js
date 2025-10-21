@@ -80,8 +80,10 @@ app.post("/login", async (req,res)=>{
                               console.log("Error comparing password", err)
                         } else{
                               if(check){
+                                    console.log(user.id)
                                     loggedIn = true
                                     currentUser = user.id
+                                    console.log(currentUser)
                                     res.redirect("/")
                               }else{
                                     res.send("incorrect password")
@@ -99,9 +101,27 @@ app.post("/login", async (req,res)=>{
 })
 
 app.post("/new-recipe", async (req,res)=>{
-      console.log(req.body);
-      let {name,type,ingredients, quantitiy,steps} = req.body
+      let {name,type,ingredients, quantity,steps} = req.body;
+      console.log(`("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES (${name},${currentUser},${type})`)
+      let id
+      try {            
+            let result = await db.query ("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES ($1,$2,$3) RETURNING recipe_id",[name,currentUser,type])
 
-      let result = await db.query ("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES ($1,$2,$3)",[name,currentUser,type])
+            id = result.rows[0].recipe_id
+
+            for (let i = 0; i < ingredients.length; i++) {
+                  result = await db.query("INSERT INTO ingredients (ingredient_name, recipe_id, quantity) VALUES($1,$2,$3)",[ingredients[i],id,quantity[i]])               
+            }
+            // result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[steps[i], id])
+           
+            steps.foreach(async step =>{
+                  result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[step, id]) 
+            })   
+
+            console.log("Recipe inserted successfully")
+      } catch (error) {
+            console.log("Error inputing recipe", error)
+      }
+ 
       res.redirect("/")
 })

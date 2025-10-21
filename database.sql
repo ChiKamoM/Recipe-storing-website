@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.users
+CREATE TABLE users
 (
     id SERIAL NOT NULL,
     uuid character varying(10) COLLATE pg_catalog."default",
@@ -12,7 +12,7 @@ CREATE TABLE ingredients(
 	ingredient_id SERIAL PRIMARY KEY,
 	ingredient_name VARCHAR(25),
 	recipe_id SERIAL REFERENCES recipes(recipe_id),
-	quantity INT	
+	quantity VARCHAR(25)	
 )
 
 
@@ -22,7 +22,7 @@ CREATE TABLE instructions(
 	recipe_id SERIAL REFERENCES recipes(recipe_id)	
 )
 
-CREATE TABLE IF NOT EXISTS public.recipes
+CREATE TABLE recipes
 (
     recipe_id integer NOT NULL DEFAULT nextval('recipes_recipe_id_seq'::regclass),
     recipe_name character varying(25) COLLATE pg_catalog."default",
