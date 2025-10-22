@@ -23,18 +23,30 @@ app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
-let loggedIn = false;
-let currentUser
+let loggedIn = true;
+let currentUser = 1
 
 app.listen(port, ()=>{
       console.log(`app running on localhost:${port}`)
 })
 
 
-app.get("/", (req,res)=>{
+app.get("/", async (req,res)=>{
 
       if(loggedIn){
-            res.render("index.ejs")
+            try {
+                  let result = await db.query("SELECT recipe_id,recipe_name FROM recipes WHERE user_id = $1", [currentUser]);
+                  if(result.rows.length > 0){
+                        let recipes = result.rows;
+                        res.render("index.ejs",{recipes:recipes})
+                        
+                  }else{
+                        res.render("index.ejs")
+                  }                     
+            } catch (error) {
+                  
+            }            
+            
       }else{
             res.render("register.ejs")
       }
@@ -113,10 +125,10 @@ app.post("/new-recipe", async (req,res)=>{
                   result = await db.query("INSERT INTO ingredients (ingredient_name, recipe_id, quantity) VALUES($1,$2,$3)",[ingredients[i],id,quantity[i]])               
             }
             // result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[steps[i], id])
-           
-            steps.foreach(async step =>{
-                  result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[step, id]) 
-            })   
+           for (let i = 0; i < steps.length; i++) {
+                  result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[steps[i], id]) 
+            }
+            console.log(steps)
 
             console.log("Recipe inserted successfully")
       } catch (error) {

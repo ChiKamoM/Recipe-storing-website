@@ -1,97 +1,18 @@
 <%- include("partials/header.ejs") %>
-<form method="post" action="/new-recipe">
-      <div class="Name">
-            <label for="name">
-                  Put dish name below
-            </label>
-            <input  type="text" maxlength="15" name="name">
+
+
+<% recipes.forEach(recipe => { %>
+      <div class="recipe-card">
+            <form action="/get_recipe/:<%=recipe.recipe_id%>" method="post">
+                  <button>
+                    <h2 class="recipe-name"> <%= recipe.recipe_name %> </h2>
+                  </button>
+            </form>
       </div>
-      <div class="type">
-            <label for="type">Select dish type below</label>
-            <select name="type" id="">
-                  <option value="sweet">Sweet</option>
-                  <option value="savoury">Savoury</option>
-            </select>
-      </div>
-      <div class="ingredients">
-            <h2>input ingredients below</h2>
-
-            <label for="ingredient">Put indgredient in left box and quantity on right</label>
-            
-            <div class="ingredient-box">
-                  <input maxlength="25"  type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-            
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-            
-
-            <button type="button">Add ingredient</button>
-      </div>
-      <h2>Input step by step instructions</h2>
-      <div>
-     <label for="step">List the steps below</label> 
-
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
+<% }) %>
 
 
-     <button type="button">Add instruction</button>    
-      </div>
-      
-      <button>submit</button>
-</form>
 
-
-<section class="recipe-display">
-      <div class="ingredients">
-
-      </div>
-
-      <div class="instructions">
-            
-      </div>
-
-</section>
-   
 <script>
 
 </script>
