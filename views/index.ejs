@@ -30,7 +30,7 @@
        
       <% }) %>
       </ul>
-      <button ">Delete recipe</button>
+      <button id="delete-recipe" data-name="<%=instructions[0].recipe_name%>" data-id="<%=instructions[0].recipe_id%>" >Delete recipe</button>
 
 
       <div id="modal-container" class="modal-container">
@@ -46,6 +46,17 @@
       </div>
 </div>
 
+<div id="delete-modal-container">
+      <div class="confim-box">
+            <form action="/delete" method="post">
+                  <p>Are you sure you want to delete your <span id="delete-item"></span>? </p>
+                  <input name="id" id="delete-id" type="hidden" name="">
+                  <button>Confirm</button>
+            </form>
+            <button id="cancel-delete">Cancel</button>
+      </div>
+</div>
+
 <% } %>
 
 
@@ -56,6 +67,12 @@
       let editModalContainer = document.getElementById("modal-container")
       let closeEditModal = document.getElementById("cancel")
       let editElementsCollection= document.getElementsByClassName("editable")
+
+      let deleteModalContainer = document.getElementById("delete-modal-container")
+      let closeDeleteModal = document.getElementById("cancel-delete")
+      let deleteItemName = document.getElementById("delete-item")
+      let deleteIdInpt = document.getElementById("delete-id")
+      let deleteBttn = document.getElementById("delete-recipe")
 
       let DataInpt = document.getElementById("update-data");
       let idInpt = document.getElementById("update-id");
@@ -101,8 +118,19 @@
                   show(editModalContainer)
             })
 
+            
       })
      
+      deleteBttn.addEventListener("click", ()=>{
+            show(deleteModalContainer);
+            deleteIdInpt.value=deleteBttn.dataset.id;
+            deleteItemName.innerHTML=deleteBttn.dataset.name;
+      })
+      
+      closeDeleteModal.addEventListener("click", () =>{
+            close(deleteModalContainer)
+      })
+
 </script>
 
 <%- include("partials/footer.ejs") %>

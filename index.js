@@ -143,10 +143,10 @@ app.post("/new-recipe", async (req,res)=>{
 app.post("/get_recipe/:id", async(req,res)=>{
       let recipeID = req.params.id
       try {
-            const instructionsResult = await db.query("SELECT recipes.recipe_name, instructions.instruction,instructions.instruction_id FROM recipes INNER JOIN instructions on recipes.recipe_id = instructions.recipe_id WHERE instructions.recipe_id = $1", [recipeID])
+            const instructionsResult = await db.query("SELECT recipes.recipe_name, recipes.recipe_id, instructions.instruction,instructions.instruction_id FROM recipes INNER JOIN instructions on recipes.recipe_id = instructions.recipe_id WHERE instructions.recipe_id = $1 ORDER BY instructions.instruction_id", [recipeID])
             const instructions =  instructionsResult.rows
 
-            const ingredientsResult = await db.query("SELECT recipes.recipe_name, ingredients.ingredient_name, ingredients.quantity, ingredients.ingredient_id FROM recipes INNER JOIN ingredients on recipes.recipe_id = ingredients.recipe_id WHERE ingredients.recipe_id = $1", [recipeID] )
+            const ingredientsResult = await db.query("SELECT recipes.recipe_name, ingredients.ingredient_name, ingredients.quantity, ingredients.ingredient_id FROM recipes INNER JOIN ingredients on recipes.recipe_id = ingredients.recipe_id WHERE ingredients.recipe_id = $1 ORDER BY ingredients.ingredient_id", [recipeID] )
             const ingredients = ingredientsResult.rows
 
             res.render("index.ejs", {instructions:instructions, ingredients:ingredients, recipes:recipes})
@@ -170,13 +170,22 @@ app.post("/edit", async (req,res)=>{
             idCol = "instruction_id"
       }
       console.log(value,table,id,column,idCol)
+      const query = `UPDATE ${table} SET ${column} = $1 WHERE ${idCol} = $2`
       
-      // try {
-      //       const result = await db.query("UPDATE $1 SET $2 = $3 WHERE $4 = $5")
-      // } catch (error) {
-            
-      // }
+      try {
+            const result = await db.query(query,[value,id])
+            console.log(result.rows)
+            res.redirect("/")
+      } catch (error) {
+            console.log(error)
+            res.send("error updating recipe")
+      }
 
 
+      
+})
+
+app.post("/delete", async (req,res) =>{
+      console.log(req.body)
       res.redirect("/")
 })
