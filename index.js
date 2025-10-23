@@ -19,12 +19,14 @@ const db = new pg.Client({
 db.connect();
 const saltRounds = 1
 
-app.use(express.static("public"))
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
 let loggedIn = true;
 let currentUser = 1
+let recipes
+
 
 app.listen(port, ()=>{
       console.log(`app running on localhost:${port}`)
@@ -37,7 +39,7 @@ app.get("/", async (req,res)=>{
             try {
                   let result = await db.query("SELECT recipe_id,recipe_name FROM recipes WHERE user_id = $1", [currentUser]);
                   if(result.rows.length > 0){
-                        let recipes = result.rows;
+                        recipes = result.rows;
                         res.render("index.ejs",{recipes:recipes})
                         
                   }else{
@@ -135,5 +137,46 @@ app.post("/new-recipe", async (req,res)=>{
             console.log("Error inputing recipe", error)
       }
  
+      res.redirect("/")
+})
+
+app.post("/get_recipe/:id", async(req,res)=>{
+      let recipeID = req.params.id
+      try {
+            const instructionsResult = await db.query("SELECT recipes.recipe_name, instructions.instruction,instructions.instruction_id FROM recipes INNER JOIN instructions on recipes.recipe_id = instructions.recipe_id WHERE instructions.recipe_id = $1", [recipeID])
+            const instructions =  instructionsResult.rows
+
+            const ingredientsResult = await db.query("SELECT recipes.recipe_name, ingredients.ingredient_name, ingredients.quantity, ingredients.ingredient_id FROM recipes INNER JOIN ingredients on recipes.recipe_id = ingredients.recipe_id WHERE ingredients.recipe_id = $1", [recipeID] )
+            const ingredients = ingredientsResult.rows
+
+            res.render("index.ejs", {instructions:instructions, ingredients:ingredients, recipes:recipes})
+      } catch (error) {
+            console.log(error)
+      }
+      
+})
+
+app.post("/edit", async (req,res)=>{
+      console.log(req.body)
+      const value = req.body.value;
+      const table = req.body.table;
+      const id = req.body.id;
+      const column = req.body.column;
+      let idCol
+
+      if(table == "ingredients"){
+            idCol = "ingredient_id"
+      }else{
+            idCol = "instruction_id"
+      }
+      console.log(value,table,id,column,idCol)
+      
+      // try {
+      //       const result = await db.query("UPDATE $1 SET $2 = $3 WHERE $4 = $5")
+      // } catch (error) {
+            
+      // }
+
+
       res.redirect("/")
 })

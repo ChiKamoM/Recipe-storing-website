@@ -1,9 +1,10 @@
 <%- include("partials/header.ejs") %>
 
 
-<% recipes.forEach(recipe => { %>
+
+      <% recipes.forEach(recipe => { %>
       <div class="recipe-card">
-            <form action="/get_recipe/:<%=recipe.recipe_id%>" method="post">
+            <form action="/get_recipe/<%=recipe.recipe_id%>" method="post">
                   <button>
                     <h2 class="recipe-name"> <%= recipe.recipe_name %> </h2>
                   </button>
@@ -12,9 +13,96 @@
 <% }) %>
 
 
+<% if (locals.instructions) { %>
+      <h1> <%= instructions[0].recipe_name %> </h1>
+      <ul>
+      <% ingredients.forEach(ingredient => { %>
+       
+            <li class="editable" data-table="ingredients" data-value="<%= ingredient.ingredient_name%>" data-column="ingredient_name" data-id="<%= ingredient.ingredient_id%>" ><%=ingredient.ingredient_name %>: <span class="editable" data-table="ingredients" data-column="quantity" data-value="<%=ingredient.quantity%>" data-id="<%=ingredient.quantity%>" > <%= ingredient.quantity %></span></li>
+       
+      <% }) %>
+      </ul>
+
+       <ul>
+      <% instructions.forEach(step => { %>
+       
+            <li class="editable" data-table="instructions" data-value="<%=step.instruction%>" data-column="instruction" data-id="<%=step.instruction_id%>" ><%=step.instruction %></li>
+       
+      <% }) %>
+      </ul>
+      <button ">Delete recipe</button>
+
+
+      <div id="modal-container" class="modal-container">
+      <div class="edit-box">
+            <form action="/edit" method="post">
+                  <input id="update-data" type="text" name="value" >
+                  <input id="update-id" type="hidden" name="id">
+                  <input id="update-column" type="hidden" name="column">
+                  <input id="update-table" type="hidden" name="table">
+                  <button>Update Row</button>
+            </form>
+            <button id="cancel">Cancel</button>
+      </div>
+</div>
+
+<% } %>
+
+
+
+
 
 <script>
+      let editModalContainer = document.getElementById("modal-container")
+      let closeEditModal = document.getElementById("cancel")
+      let editElementsCollection= document.getElementsByClassName("editable")
 
+      let DataInpt = document.getElementById("update-data");
+      let idInpt = document.getElementById("update-id");
+      let colInpt = document.getElementById("update-column");
+      let tableInpt = document.getElementById("update-table")
+
+      let editElements = Array.from(editElementsCollection)
+
+      function close(modal) {
+            modal.classList.add("hidden")
+      }
+
+      function show(modal) {
+            modal.classList.remove("hidden")
+      }
+
+      function fillInput(source) {
+            
+            console.log(source.dataset.id, source.dataset.column, source.dataset.value, source.dataset.table)
+            console.log(DataInpt,idInpt, colInpt,tableInpt)
+
+
+            DataInpt.value = source.dataset.value
+            console.log(DataInpt.value)
+
+            colInpt.value = source.dataset.column
+            console.log(source.dataset.column)
+
+            console.log("id is",source.dataset.id)
+            idInpt.value = source.dataset.id
+
+            tableInpt.value = source.dataset.table
+            
+      }
+
+      closeEditModal.addEventListener("click", ()=>{
+            close(editModalContainer)
+      })
+
+      editElements.forEach(element =>{
+            element .addEventListener("click", function(){
+                  fillInput(this)
+                  show(editModalContainer)
+            })
+
+      })
+     
 </script>
 
 <%- include("partials/footer.ejs") %>
