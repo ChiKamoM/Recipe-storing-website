@@ -23,9 +23,12 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
-let loggedIn = true;
-let currentUser = 1
+let loggedIn = false;
+let currentUser; 
 let recipes
+let userType
+let siteAccess
+let errorMessage
 
 
 app.listen(port, ()=>{
@@ -37,16 +40,18 @@ app.get("/", async (req,res)=>{
 
       if(loggedIn){
             try {
-                  let result = await db.query("SELECT recipe_id,recipe_name FROM recipes WHERE user_id = $1", [currentUser]);
-                  if(result.rows.length > 0){
-                        recipes = result.rows;
+                  let result = await db.query("SELECT recipe_id,recipe_name FROM recipes WHERE user_id = $1 ORDER BY recipe_id", [currentUser]);
+                  recipes = result.rows;
+                  
+                  console.log("the amount of recipes is",recipes.length)
+                  if(recipes.length > 0){
+                        console.log(recipes)
                         res.render("index.ejs",{recipes:recipes})
-                        
                   }else{
                         res.render("index.ejs")
                   }                     
             } catch (error) {
-                  
+                 console.log(error) 
             }            
             
       }else{
@@ -55,27 +60,69 @@ app.get("/", async (req,res)=>{
       
 })
 
+app.get("/adminView", async (req,res)=>{
+      if(currentUser == "admin"){
+
+            let result = await db.query("SELECT name, email, uuid, account_role FROM users")
+            console.log(result.rows)
+            const users = result.rows
+            
+
+
+            res.render("admin.ejs",{users:users})
+      }else{
+           res.redirect("/")
+      }
+})
+
 app.post("/register", async (req,res)=>{
       const {name,email, password} = req.body;
+      let role
       let uuid = uuidv4().slice(0,4)
-      try {
-         let result = await db.query("SELECT * FROM users WHERE email = $1", [email])
-         console.log(result.rows)
-         if(result.rows < 1){
-            const hash = await bcrypt.hash(password, saltRounds)
-            result = await db.query("INSERT INTO users (uuid,name,email,password) VALUES ($1,$2,$3,$4)",[uuid,name,email,hash])
-            console.log(result)
-            loggedIn = true;
-            res.render("login.ejs");
-         } else{
-            res.send("user already exists. Try logging in")
-         }
+
+      if(password == process.env.ADMIN_CODE){
+            role = "admin"
+
+            try {
+                  let result = await db.query("SELECT * FROM users WHERE email = $1", [email])
+                  console.log(result.rows)
+                  if(result.rows < 1){
+                   const hash = await bcrypt.hash(password, saltRounds)
+                        result = await db.query("INSERT INTO users (uuid,name,email,password,account_role) VALUES ($1,$2,$3,$4,$5)",[uuid,name,email,hash,role])
+                        console.log(result)
+
+                        res.render("login.ejs");
+                  } else{
+                   res.send("user already exists. Try logging in")
+                  }        
+      } catch (error) {
+            console.log(error)
+            res.redirect("/")
+            
+      }
+      }else{
+            role = "user"
+            try {
+                  let result = await db.query("SELECT * FROM users WHERE email = $1", [email])
+                  console.log(result.rows)
+                  if(result.rows < 1){
+                   const hash = await bcrypt.hash(password, saltRounds)
+                        result = await db.query("INSERT INTO users (uuid,name,email,password,account_role) VALUES ($1,$2,$3,$4,$5)",[uuid,name,email,hash,role])
+                        console.log(result)
+                        loggedIn = true;
+                        res.render("login.ejs");
+                  } else{
+                   res.render("register.ejs")
+                  }        
          
       } catch (error) {
             console.log(error)
             res.redirect("/")
             
       }
+      }
+
+      
 })
 
 app.get("/login", (req,res)=>{
@@ -94,11 +141,27 @@ app.post("/login", async (req,res)=>{
                               console.log("Error comparing password", err)
                         } else{
                               if(check){
-                                    console.log(user.id)
-                                    loggedIn = true
-                                    currentUser = user.id
-                                    console.log(currentUser)
-                                    res.redirect("/")
+                                    if(user.account_role == "admin"){
+                                          currentUser = "admin"
+                                          res.redirect("/adminView")
+
+                                    }else{
+                                          if(user.acces == "locked"){
+                                                loggedIn = true
+                                                currentUser = user.id
+                                                siteAccess = false
+                                                console.log(loggedIn,currentUser,siteAccess)
+                                                res.redirect("/")
+                                          }else{
+                                                loggedIn = true
+                                                currentUser = user.id
+                                                siteAccess = true
+                                                console.log(loggedIn,currentUser,siteAccess)
+                                                res.redirect("/")
+                                          }
+                                             
+                                    }
+                                    
                               }else{
                                     res.send("incorrect password")
                               }
@@ -118,7 +181,8 @@ app.post("/new-recipe", async (req,res)=>{
       let {name,type,ingredients, quantity,steps} = req.body;
       console.log(`("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES (${name},${currentUser},${type})`)
       let id
-      try {            
+            if(siteAccess){
+                  try {            
             let result = await db.query ("INSERT INTO recipes (recipe_name,user_id,dish_type) VALUES ($1,$2,$3) RETURNING recipe_id",[name,currentUser,type])
 
             id = result.rows[0].recipe_id
@@ -126,18 +190,29 @@ app.post("/new-recipe", async (req,res)=>{
             for (let i = 0; i < ingredients.length; i++) {
                   result = await db.query("INSERT INTO ingredients (ingredient_name, recipe_id, quantity) VALUES($1,$2,$3)",[ingredients[i],id,quantity[i]])               
             }
-            // result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[steps[i], id])
            for (let i = 0; i < steps.length; i++) {
                   result = await db.query("INSERT INTO instructions (instruction,recipe_id) VALUES($1, $2)",[steps[i], id]) 
             }
-            console.log(steps)
+            res.redirect("/")
 
             console.log("Recipe inserted successfully")
       } catch (error) {
             console.log("Error inputing recipe", error)
       }
+            }else{
+                  errorMessage = "Cant upload recipe, user locked"
+                  res.send("user locked")
+                  // res.redirect("/")
+            }
+
+
+      
  
-      res.redirect("/")
+      
+})
+
+app.get("/new-recipe", (req,res)=>{
+      res.render("new-recipe.ejs")
 })
 
 app.post("/get_recipe/:id", async(req,res)=>{
@@ -187,5 +262,32 @@ app.post("/edit", async (req,res)=>{
 
 app.post("/delete", async (req,res) =>{
       console.log(req.body)
+      const id = req.body.id;
+      let result = await db.query("DELETE FROM instructions WHERE recipe_id = $1", [id])
+      result = await db.query("DELETE FROM ingredients WHERE recipe_id = $1", [id])
+      result = await db.query("DELETE FROM recipes WHERE recipe_id = $1", [id])
+      res.redirect("/")
+})
+
+app.post("/lock/:uuid", async (req,res)=>{
+      const uuid = req.params.uuid
+
+      const result = await db.query("UPDATE users SET access = 'locked' WHERE uuid = $1",[uuid])
+
+      res.redirect("/")
+})
+
+app.post("/unlock/:uuid", async (req,res)=>{
+      const uuid = req.params.uuid
+
+      const result = await db.query("UPDATE users SET access = 'open' WHERE uuid = $1",[uuid])
+
+      res.redirect("/")
+})
+
+app.post("/logout", (req,res)=>{
+      loggedIn = false
+      recipes=[]
+      currentUser = null
       res.redirect("/")
 })

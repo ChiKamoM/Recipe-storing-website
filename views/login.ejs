@@ -1,12 +1,14 @@
 <%- include("partials/header.ejs") %>
+<div class="center-box">
+<form action="/login" method="post" class=" form register-form">
+     <h2>Loginn below</h2>
+      <input placeholder="Email" type="email" name="email">
 
-<form action="/login" method="post">
-      <label for="email">Email</label>
-      <input type="email" name="email">
-
-      <label for="password">Password</label>
-      <input type="password" name="password">
-      <button type="submit">Login</button>
+      
+      <input placeholder="Password" type="password" name="password">
+      <button class="submit-form-button" type="submit">Login</button>
 </form>
+
+</div>
 
 <%- include("partials/footer.ejs") %>

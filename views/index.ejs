@@ -1,21 +1,32 @@
 <%- include("partials/header.ejs") %>
 
-
-
+<% if (locals.recipes) { %>
+ <div class="recipes-names">
       <% recipes.forEach(recipe => { %>
-      <div class="recipe-card">
-            <form action="/get_recipe/<%=recipe.recipe_id%>" method="post">
-                  <button>
-                    <h2 class="recipe-name"> <%= recipe.recipe_name %> </h2>
-                  </button>
-            </form>
-      </div>
-<% }) %>
+            <div class="recipe-card">
+                  <form action="/get_recipe/<%=recipe.recipe_id%>" method="post">
+                        <button>
+                        <h2 class="recipe-name"> <%= recipe.recipe_name %> </h2>
+                        </button>
+                  </form>
+            </div>
+      <% }) %>
+ </div>
+      
+<% } else {%>
+<p>no recipes</p>
+
+
+      <% } %>
 
 
 <% if (locals.instructions) { %>
-      <h1> <%= instructions[0].recipe_name %> </h1>
+      <div class="recipe-details">
+              <h1> <%= instructions[0].recipe_name %> </h1>
       <ul>
+            <h3 class="section-name">
+                  Ingredients
+            </h3>
       <% ingredients.forEach(ingredient => { %>
        
             <li class="editable" data-table="ingredients" data-value="<%= ingredient.ingredient_name%>" data-column="ingredient_name" data-id="<%= ingredient.ingredient_id%>" ><%=ingredient.ingredient_name %>: <span class="editable" data-table="ingredients" data-column="quantity" data-value="<%=ingredient.quantity%>" data-id="<%=ingredient.quantity%>" > <%= ingredient.quantity %></span></li>
@@ -24,6 +35,9 @@
       </ul>
 
        <ul>
+            <h3 class="section-name">
+                  Instructions
+            </h3>
       <% instructions.forEach(step => { %>
        
             <li class="editable" data-table="instructions" data-value="<%=step.instruction%>" data-column="instruction" data-id="<%=step.instruction_id%>" ><%=step.instruction %></li>
@@ -31,12 +45,15 @@
       <% }) %>
       </ul>
       <button id="delete-recipe" data-name="<%=instructions[0].recipe_name%>" data-id="<%=instructions[0].recipe_id%>" >Delete recipe</button>
+      </div>
+    
 
 
-      <div id="modal-container" class="modal-container">
-      <div class="edit-box">
+      <div id="modal-container" class="modal-container hidden">
+      <div class="edit-box " >
             <form action="/edit" method="post">
-                  <input id="update-data" type="text" name="value" >
+                  
+                  <textarea class="edit-input" id="update-data" type="text" name="value" ></textarea>
                   <input id="update-id" type="hidden" name="id">
                   <input id="update-column" type="hidden" name="column">
                   <input id="update-table" type="hidden" name="table">
@@ -46,18 +63,22 @@
       </div>
 </div>
 
-<div id="delete-modal-container">
+<div id="delete-modal-container" class="hidden modal-container">
       <div class="confim-box">
             <form action="/delete" method="post">
                   <p>Are you sure you want to delete your <span id="delete-item"></span>? </p>
                   <input name="id" id="delete-id" type="hidden" name="">
-                  <button>Confirm</button>
+                  <button class="delete-button">Confirm</button>
             </form>
-            <button id="cancel-delete">Cancel</button>
+            <button id="cancel-delete" class="delete-button">Cancel</button>
       </div>
 </div>
 
 <% } %>
+
+<form action="/new-recipe" method="get">
+      <button>Add new recipe</button>
+</form>
 
 
 

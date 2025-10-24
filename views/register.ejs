@@ -1,22 +1,25 @@
 <%- include("partials/header.ejs") %>
-<form method="post" action="/register">
-      <label for="name">Name</label>
-      <input required  type="text" name="name">
 
-      <label for="email">email</label>
-      <input required type="email" name="email">
+<div class="center-box">
+      
+      <form method="post" action="/register" class=" form register-form">
+            <h2>Sign up below</h2>
+      
+      <input placeholder="Name" required  type="text" name="name">
 
-      <label for="password">Password</label>
-      <input required type="password" name="password">
+      
+      <input placeholder="Email" required type="email" name="email">
 
-      <label for="confirm-password">Confirm-password</label>
-      <input required type="password"name="confirm-password">
+      
+      <input placeholder="Password" required type="password" name="password">
 
-      <button>Register</button>
+
+      <button class="submit-form-button">Register</button>
 </form>
 
 <form action="/login" method="get">
-      <button>login</button>
+     <p>Already have an Account? <button class="login-redirect">login</button></p>
 </form>
+</div>
       
 <%- include("partials/footer.ejs") %>

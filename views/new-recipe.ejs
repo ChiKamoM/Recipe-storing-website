@@ -15,71 +15,69 @@
                   <option value="savoury">Savoury</option>
             </select>
       </div>
-      <div class="ingredients">
+      <div id="ingredients-container" class="ingredients">
             <h2>input ingredients below</h2>
 
             <label for="ingredient">Put indgredient in left box and quantity on right</label>
             
-            <div class="ingredient-box">
+            <div id="orginial-ingredients-inpt" class="ingredient-box">
                   <input maxlength="25"  type="text" placeholder="Ingredient name" name="ingredients">
                   <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-            
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
-
-            <div class="ingredient-box">
-                  <input maxlength="25" type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
-            </div>
+            </div>        
             
 
-            <button type="button">Add ingredient</button>
+            <button id="new-ingredient" type="button">Add ingredient</button>
       </div>
       <h2>Input step by step instructions</h2>
-      <div>
+
+      <div id="instructions-container">
      <label for="step">List the steps below</label> 
 
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
-
-      <input maxlength="255" type="text" name="steps" >
+      <textarea id="instruction-input" maxlength="255" type="text" name="steps" ></textarea>
 
 
-     <button type="button">Add instruction</button>    
+     <button id="add-instruction" type="button">Add instruction</button>    
       </div>
       
       <button>submit</button>
 </form>
+
+
+<form action="/" method="get">
+      <button>Home page</button>
+</form>
+
+<script>
+      const ingredientsInpt = document.getElementById("orginial-ingredients-inpt")
+      const cloneIngrdsBttn = document.getElementById("new-ingredient")
+      const ingredientsContainer = document.getElementById("ingredients-container")
+
+
+      const instructionInpt = document.getElementById("instruction-input");
+      const cloneInstructionsBttn = document.getElementById("add-instruction");
+      const instructionsContainer = document.getElementById("instructions-container")
+
+
+
+
+      function clone(element,container,button) {
+            console.log(element,container,button)
+            const clonedItem = element.cloneNode(true);
+            console.log(clonedItem)
+            clonedItem.setAttribute('id',"")
+            container.insertBefore(clonedItem,button)
+      }
+      
+
+      cloneIngrdsBttn.addEventListener("click",() =>{
+            clone(ingredientsInpt,ingredientsContainer,cloneIngrdsBttn)
+      })
+
+      cloneInstructionsBttn.addEventListener("click", ()=>{
+            clone(instructionInpt,instructionsContainer,cloneInstructionsBttn)
+      })
+
+
+</script>
 
 <%- include("partials/footer.ejs") %>

@@ -1,0 +1,27 @@
+<%- include("partials/header.ejs") %>
+<h1>
+      hello admin user
+</h1>
+
+
+<% if (locals.users) { %>
+      <% users.forEach(user => { %>
+      
+            <p>This app has <%= users.length %> users</p>
+
+            <div class="user-card">
+                  <h2 class="username"><%= user.name %></h2>
+                  <h3 class="user-email"><%= user.email %></h3>
+                  <p class="user-type"><%= user.account_role %></p>
+                  <form action="/lock/<%=user.uuid%>" method="post">
+                        <button>lock user</button>
+                        
+                  </form>
+                  <form action="/unlock/<%=user.uuid%>" method="post">
+                        <button>unlock user</button>
+                  </form>
+            </div>
+      <% }) %>
+<% } %>
+
+<%- include("partials/footer.ejs") %>
