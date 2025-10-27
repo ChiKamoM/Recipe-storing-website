@@ -200,9 +200,7 @@ app.post("/new-recipe", async (req,res)=>{
             console.log("Error inputing recipe", error)
       }
             }else{
-                  errorMessage = "Cant upload recipe, user locked"
                   res.send("user locked")
-                  // res.redirect("/")
             }
 
 
@@ -239,7 +237,8 @@ app.post("/edit", async (req,res)=>{
       const column = req.body.column;
       let idCol
 
-      if(table == "ingredients"){
+            if(siteAccess){
+                if(table == "ingredients"){
             idCol = "ingredient_id"
       }else{
             idCol = "instruction_id"
@@ -254,7 +253,11 @@ app.post("/edit", async (req,res)=>{
       } catch (error) {
             console.log(error)
             res.send("error updating recipe")
-      }
+      }  
+            }else{
+                  res.send("user blocked")
+            }
+      
 
 
       
