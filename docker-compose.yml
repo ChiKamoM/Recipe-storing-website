@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:lateset
+    environment:
+      POSTGRES_USER: my_username
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_DB: my_database
+    volumes:
+      -posgres-data:var/klib/postgresql/data
+    ports:
+     - "5432:5432"
+
+volumes:
+  postgres-data:      
