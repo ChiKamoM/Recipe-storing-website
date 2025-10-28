@@ -16,6 +16,14 @@ const db = new pg.Client({
       password:process.env.PG_PASSWORD,
       port:process.env.PG_PORT
 })
+
+//  PG_USER="postgres"
+//  PG_HOST="localhost"
+//  PG_DATABASE="recipe-site"
+//  PG_PASSWORD="justmondlisok"
+//  PG_PORT="5431"
+//  ADMIN_CODE="iamadmin"
+
 db.connect();
 const saltRounds = 1
 
