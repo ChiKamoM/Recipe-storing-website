@@ -1,16 +1,25 @@
-version: '3.8'
-
 services:
   postgres:
-    image: postgres:lateset
+    image: postgres:latest
     environment:
-      POSTGRES_USER: my_username
-      POSTGRES_PASSWORD: my_password
-      POSTGRES_DB: my_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: justmondlisok
+      POSTGRES_DB: recipe-site
     volumes:
-      -posgres-data:var/klib/postgresql/data
+      - postgres-data:/var/lib/postgresql
     ports:
-     - "5432:5432"
+     - "5431:5432"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
 
 volumes:
-  postgres-data:      
+  postgres-data:
+

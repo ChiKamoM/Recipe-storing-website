@@ -8,10 +8,10 @@ CREATE TABLE IF NOT EXISTS users
     account_role character varying(5),
     access character varying(6),
     CONSTRAINT users_pkey PRIMARY KEY (id)
-)
+);
 
 
-CREATE TABLE recipes
+CREATE TABLE IF NOT EXISTS recipes
 (
     recipe_id SERIAL NOT NULL,
     recipe_name character varying(25) ,
@@ -20,9 +20,9 @@ CREATE TABLE recipes
     CONSTRAINT recipes_pkey PRIMARY KEY (recipe_id),
     CONSTRAINT recipes_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES public.users (id) MATCH SIMPLE
-)
+);
 
-CREATE TABLE ingredients
+CREATE TABLE IF NOT EXISTS ingredients
 (
     ingredient_id SERIAL,
     ingredient_name character varying(25),
@@ -32,10 +32,10 @@ CREATE TABLE ingredients
     CONSTRAINT ingredients_recipe_id_fkey FOREIGN KEY (recipe_id)
         REFERENCES public.recipes (recipe_id) MATCH SIMPLE
 
-)
+);
 
 
-CREATE TABLE instructions
+CREATE TABLE IF NOT EXISTS instructions
 (
     instruction_id SERIAL ,
     instruction character varying(255),
@@ -44,7 +44,7 @@ CREATE TABLE instructions
     CONSTRAINT instructions_recipe_id_fkey FOREIGN KEY (recipe_id)
         REFERENCES public.recipes (recipe_id) MATCH SIMPLE
 
-)
+);
 
 
 
