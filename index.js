@@ -32,8 +32,8 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
-let loggedIn = true;
-let currentUser = 1; 
+let loggedIn ;
+let currentUser; 
 let recipes
 let userType
 let siteAccess
