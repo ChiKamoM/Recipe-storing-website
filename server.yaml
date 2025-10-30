@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: nasachi/recipe-storing-website-app
+          imagePullPolicy: "IfNotPresent"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-nodeport
+spec:
+  type: NodePort
+  selector:
+    app: server
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001
