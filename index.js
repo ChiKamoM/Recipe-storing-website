@@ -32,7 +32,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
-let loggedIn = false;
+let loggedIn ;
 let currentUser; 
 let recipes
 let userType
@@ -155,7 +155,7 @@ app.post("/login", async (req,res)=>{
                                           res.redirect("/adminView")
 
                                     }else{
-                                          if(user.acces == "locked"){
+                                          if(user.access == "locked"){
                                                 loggedIn = true
                                                 currentUser = user.id
                                                 siteAccess = false

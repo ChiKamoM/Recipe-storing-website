@@ -4,9 +4,25 @@
       <link rel="stylesheet" href="/styles/main.css">
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
       <title>My Cookbook</title>
 </head>
 <body>
-      <form action="/logout" method="post">
-            <button>logout</button>
-      </form>
+      <nav>
+            <h2 class="page-heading">Recipe storing site</h2>
+
+            <form action="/" method="get">
+                  <button class="nav-bttn">Home page</button>
+            </form>
+
+            <form action="/new-recipe" method="get">
+                  <button class="nav-bttn">Add new recipe</button>
+            </form>
+
+            <form action="/logout" method="post">
+                  <button class="nav-bttn logout-button">logout</button>
+            </form>
+      </nav>
+      

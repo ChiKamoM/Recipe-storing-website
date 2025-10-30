@@ -5,6 +5,61 @@
       z-index: -1;
 }
 
+*{
+      font-family: "Josefin Slab";
+      color: #343434;
+      box-sizing: border-box;
+}
+
+nav{
+      background-color: white;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+}
+
+body{
+      background-color: #ebdac8;
+      margin: 0px;
+}
+
+.recipes-names{
+      width: fit-content;
+      padding: 0 5px;
+      display: flex;
+      justify-content: space-evenly;
+}
+
+.nav-bttn{
+      border: none;
+      background-color: white;
+      text-decoration: underline;
+      font-size: 20px;
+      
+}
+button:hover{
+      cursor: pointer;
+}
+
+.default-box{
+      width:300px;
+      margin:auto;
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      margin-top: 50px;
+}
+h1{
+      text-align: center;
+      background-color: rgb(100, 88, 88);
+      color: white;
+      padding-top: 10px;
+}
+.delete-recipe{
+      margin-right: auto;
+}
+
 
 .register-form{
       border:1px gray outset;
@@ -50,10 +105,15 @@
 .login-redirect{
       color: blue;
       text-decoration: underline;
-      background-color: white;
+      background: none;
       border: none;
 }
-.recipe-names{
+
+.name{
+      display: flex;
+      flex-direction: column;
+}
+/* .recipe-names{
       display: flex;
       justify-content: space-evenly;
 }
@@ -62,9 +122,9 @@
       border: 1px solid grey;
       width: fit-content;
       
-}
+} */
 
-.recipe-details{
+/* .recipe-details{
       width: 70%;
       border: 1px solid black;
       border-radius: 12px;
@@ -73,7 +133,7 @@
       margin:auto;
       margin-top:20px
 
-}
+} */
 
 .modal-container{
   position: fixed;
