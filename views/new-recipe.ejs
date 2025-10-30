@@ -1,7 +1,7 @@
 <%- include("partials/header.ejs") %>
 
 
-<form method="post" action="/new-recipe">
+<form class="new-recipe-form default-box" method="post" action="/new-recipe">
       <div class="Name">
             <label for="name">
                   Put dish name below
@@ -43,9 +43,7 @@
 </form>
 
 
-<form action="/" method="get">
-      <button>Home page</button>
-</form>
+
 
 <script>
       const ingredientsInpt = document.getElementById("orginial-ingredients-inpt")
