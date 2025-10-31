@@ -113,6 +113,18 @@ h1{
       display: flex;
       flex-direction: column;
 }
+
+
+.error-text{
+      color:red;
+      text-decoration: underline;
+      font-size: 10px;
+}
+
+.box-heading{
+      margin-bottom: 5px;
+}
+
 /* .recipe-names{
       display: flex;
       justify-content: space-evenly;

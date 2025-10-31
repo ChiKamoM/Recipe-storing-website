@@ -18,13 +18,6 @@ const db = new pg.Client({
 })
 
 
-//  PG_USER="postgres"
-//  PG_HOST="localhost"
-//  PG_DATABASE="recipe-site"
-//  PG_PASSWORD="justmondlisok"
-//  PG_PORT="5431"
-//  ADMIN_CODE="iamadmin"
-
 db.connect();
 const saltRounds = 1
 
@@ -172,12 +165,16 @@ app.post("/login", async (req,res)=>{
                                     }
                                     
                               }else{
-                                    res.send("incorrect password")
+                                    errorMessage = "Incorrect password, try again"
+                                    console.log(errorMessage)
+                                    res.render("login.ejs", {errorMessage:errorMessage})
                               }
                         }
                   })
             }else{
-                  res.send("user not found")
+                  errorMessage = `User ${email} not found, retype email or register`
+                  console.log(errorMessage) 
+                  res.render("login.ejs",{errorMessage:errorMessage})
             }     
       } catch (error) {
         console.log(error)      

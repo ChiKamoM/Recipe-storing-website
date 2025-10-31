@@ -15,11 +15,8 @@
       <% }) %>
  </div>
       
-<% } else {%>
-      <form action="/new-recipe" method="get">
-            <button>Add new recipe</button>
-      </form>
-      <% } %>
+<% } %>
+      
 <% if (locals.instructions) { %>
       <div class="default-box">
               <h1> <%= instructions[0].recipe_name %> </h1>
