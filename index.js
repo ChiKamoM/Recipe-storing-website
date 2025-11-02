@@ -38,6 +38,16 @@ app.listen(port, ()=>{
 })
 
 
+app.get("/admin", async (req,res)=>{
+                  let result = await db.query("SELECT name, email, uuid, account_role FROM users")
+            console.log(result.rows)
+            const users = result.rows
+            
+
+
+            res.render("admin.ejs",{users:users})
+})
+
 app.get("/", async (req,res)=>{
 
       if(loggedIn){
@@ -283,7 +293,7 @@ app.post("/lock/:uuid", async (req,res)=>{
 
       const result = await db.query("UPDATE users SET access = 'locked' WHERE uuid = $1",[uuid])
 
-      res.redirect("/")
+      res.redirect("/admin")
 })
 
 app.post("/unlock/:uuid", async (req,res)=>{
@@ -291,7 +301,7 @@ app.post("/unlock/:uuid", async (req,res)=>{
 
       const result = await db.query("UPDATE users SET access = 'open' WHERE uuid = $1",[uuid])
 
-      res.redirect("/")
+      res.redirect("/admin")
 })
 
 app.post("/logout", (req,res)=>{
