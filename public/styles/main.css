@@ -217,3 +217,20 @@ h1{
 .instructions-header{
       text-align: center;
 }
+
+.users-container{
+      background-color: white;
+      width: 90%;
+      padding: 15px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+}
+
+.user-card{
+      background-color: rgba(224, 226, 212, 0.564);
+      width: 250px;
+      padding: 15px;
+      border-radius: 16px;
+}
