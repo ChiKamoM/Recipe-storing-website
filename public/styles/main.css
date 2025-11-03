@@ -1,5 +1,4 @@
 
-
 .hidden{
       display: none;
       z-index: -1;
@@ -177,6 +176,44 @@ h1{
 }
 
 .edit-input{
-      
       height: 25px;
+}
+
+.new-recipe-form{
+      padding: 15px;
+}
+
+.new-recipe-form input{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+}
+
+.name-title{
+      width: fit-content;
+}
+
+.Name{
+      display: flex;
+      justify-content: space-between;
+}
+
+.recipe-name-input{
+      width: 130px;
+      height: 20px;
+      align-self: center;
+}
+
+.quantity-input{
+      width: 50px;
+      margin-left: 5px;
+}
+
+.ingredients-header{
+      width: 100%;
+      text-align: center;
+}
+
+.instructions-header{
+      text-align: center;
 }

@@ -3,10 +3,8 @@
 
 <form class="new-recipe-form default-box" method="post" action="/new-recipe">
       <div class="Name">
-            <label for="name">
-                  Put dish name below
-            </label>
-            <input  type="text" maxlength="15" name="name">
+            <h2 class="name-title">Recipe for</h2>
+            <input class="recipe-name-input" type="text" maxlength="15" name="name">
       </div>
       <div class="type">
             <label for="type">Select dish type below</label>
@@ -16,19 +14,19 @@
             </select>
       </div>
       <div id="ingredients-container" class="ingredients">
-            <h2>input ingredients below</h2>
+            <h2 class="ingredients-header">INGREDIENTS</h2>
 
             <label for="ingredient">Put indgredient in left box and quantity on right</label>
             
             <div id="orginial-ingredients-inpt" class="ingredient-box">
-                  <input maxlength="25"  type="text" placeholder="Ingredient name" name="ingredients">
-                  <input maxlength="25" type="text" name="quantity">
+                  <input class="ingredient-input" maxlength="25" type="text" placeholder="Ingredient" name="ingredients">
+                  <input class="quantity-input" maxlength="25" type="text" placeholder="Quntity" name="quantity">
             </div>        
             
 
             <button id="new-ingredient" type="button">Add ingredient</button>
       </div>
-      <h2>Input step by step instructions</h2>
+      <h2 class="instructions-header">INSTRUCTIONS</h2>
 
       <div id="instructions-container">
      <label for="step">List the steps below</label> 
