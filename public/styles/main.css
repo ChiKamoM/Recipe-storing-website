@@ -17,6 +17,9 @@ nav{
       justify-content: space-between;
       align-items: center;
       padding: 0 20px;
+      width: 100%;
+      position: fixed;
+      top:0;
 }
 
 body{
@@ -25,11 +28,32 @@ body{
 }
 
 .recipes-names{
-      width: fit-content;
-      padding: 0 5px;
-      display: flex;
-      justify-content: space-evenly;
+      height:100%;
+      width: 200px;
+      position: fixed;
+      margin-top: 80px;
+      z-index: 1;
+      top:0;
+      left:0;
+      background-color: #111;
+      overflow-x:hidden;
+      padding-top: 20px;
 }
+.choose-recipe{
+      all:unset;
+      padding: 6px 8px 6px 16px;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+}
+
+.choose-recipe:hover{
+      color: #f1f1ff;
+      background-color: #3d3030;
+      border: rgb(96, 89, 89) 2px inset;
+
+}
+
 
 .nav-bttn{
       border: none;
@@ -47,7 +71,8 @@ button:hover{
       margin:auto;
       background-color: white;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-      margin-top: 50px;
+      margin-top: 180px;
+      
 }
 h1{
       text-align: center;
@@ -59,6 +84,12 @@ h1{
       margin-right: auto;
 }
 
+#main{
+      
+      margin: auto;
+      margin-top: 180px;
+      /* margin-bottom: 20px; */
+}
 
 .register-form{
       border:1px gray outset;
@@ -122,6 +153,22 @@ h1{
 
 .box-heading{
       margin-bottom: 5px;
+}
+
+.error-message{
+      background-color: rgb(199, 112, 112);
+      border:1px solid rgb(114, 62, 62);
+      color: rgb(85, 27, 27);
+      height: 80px;
+      width: 350px;
+      margin: auto;
+      font-weight: 600;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      border-radius: 4px;
 }
 
 /* .recipe-names{
@@ -233,4 +280,10 @@ h1{
       width: 250px;
       padding: 15px;
       border-radius: 16px;
+}
+
+
+.editable:hover{
+   cursor: pointer;
+   text-decoration: underline; 
 }

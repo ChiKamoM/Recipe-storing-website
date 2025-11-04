@@ -4,22 +4,25 @@
       
       <form method="post" action="/register" class=" form register-form">
             <h2>Sign up below</h2>
+            <% if (locals.errorMessage) { %>
+                  <p class="error-text"><%= errorMessage %> </p>
+            <% } %>
       
-      <input placeholder="Name" required  type="text" name="name">
+            <input placeholder="Name" required  type="text" name="name">
 
       
-      <input placeholder="Email" required type="email" name="email">
+            <input placeholder="Email" required type="email" name="email">
 
       
-      <input placeholder="Password" required type="password" name="password">
+            <input placeholder="Password" required type="password" name="password">
 
 
-      <button class="submit-form-button">Register</button>
-</form>
+            <button class="submit-form-button">Register</button>
+      </form>
 
-<form action="/login" method="get">
-     <p>Already have an Account? <button class="login-redirect">login</button></p>
-</form>
+      <form action="/login" method="get">
+            <p>Already have an Account? <button class="login-redirect">login</button></p>
+      </form>
 </div>
       
 <%- include("partials/footer.ejs") %>

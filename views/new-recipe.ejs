@@ -4,7 +4,7 @@
 <form class="new-recipe-form default-box" method="post" action="/new-recipe">
       <div class="Name">
             <h2 class="name-title">Recipe for</h2>
-            <input class="recipe-name-input" type="text" maxlength="15" name="name">
+            <input class="recipe-name-input" type="text" maxlength="100" name="name">
       </div>
       <div class="type">
             <label for="type">Select dish type below</label>
@@ -41,39 +41,15 @@
 </form>
 
 
-
-
-<script>
-      const ingredientsInpt = document.getElementById("orginial-ingredients-inpt")
-      const cloneIngrdsBttn = document.getElementById("new-ingredient")
-      const ingredientsContainer = document.getElementById("ingredients-container")
-
-
-      const instructionInpt = document.getElementById("instruction-input");
-      const cloneInstructionsBttn = document.getElementById("add-instruction");
-      const instructionsContainer = document.getElementById("instructions-container")
+<% if (locals.errorMessage) { %>
+      <div class="error-message">
+            <p><%= errorMessage %></p>
+      </div>
+<% } %>
 
 
 
 
-      function clone(element,container,button) {
-            console.log(element,container,button)
-            const clonedItem = element.cloneNode(true);
-            console.log(clonedItem)
-            clonedItem.setAttribute('id',"")
-            container.insertBefore(clonedItem,button)
-      }
-      
-
-      cloneIngrdsBttn.addEventListener("click",() =>{
-            clone(ingredientsInpt,ingredientsContainer,cloneIngrdsBttn)
-      })
-
-      cloneInstructionsBttn.addEventListener("click", ()=>{
-            clone(instructionInpt,instructionsContainer,cloneInstructionsBttn)
-      })
-
-
-</script>
+<script src="/js/new-recipe.js"></script>
 
 <%- include("partials/footer.ejs") %>

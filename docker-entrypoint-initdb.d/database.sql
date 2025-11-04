@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS recipes
 (
     recipe_id SERIAL NOT NULL,
-    recipe_name character varying(25) ,
+    recipe_name character varying(100) ,
     user_id integer NOT NULL,
     dish_type character varying(7),
     CONSTRAINT recipes_pkey PRIMARY KEY (recipe_id),

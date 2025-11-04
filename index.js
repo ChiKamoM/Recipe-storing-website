@@ -105,13 +105,15 @@ app.post("/register", async (req,res)=>{
 
                         res.render("login.ejs");
                   } else{
-                   res.send("user already exists. Try logging in")
+                   
+                  errorMessage = `User ${email} already exists. Try logging in`
+                  
+                  res.render("register.ejs",{errorMessage:errorMessage})
                   }        
-      } catch (error) {
-            console.log(error)
-            res.redirect("/")
-            
-      }
+            } catch (error) {
+                  console.log(error)
+                  res.redirect("/")            
+            }
       }else{
             role = "user"
             try {
@@ -124,14 +126,18 @@ app.post("/register", async (req,res)=>{
                         loggedIn = true;
                         res.render("login.ejs");
                   } else{
-                   res.render("register.ejs")
+                    
+                        errorMessage = `User ${email} already exists. Try logging in`
+                  
+                        res.render("register.ejs",{errorMessage:errorMessage})
+                     
                   }        
          
-      } catch (error) {
-            console.log(error)
-            res.redirect("/")
+            } catch (error) {
+                  console.log(error)
+                  res.redirect("/")
             
-      }
+            }
       }
 
       
@@ -216,7 +222,8 @@ app.post("/new-recipe", async (req,res)=>{
             console.log("Error inputing recipe", error)
       }
             }else{
-                  res.send("user locked")
+                  errorMessage = `Error adding recipe, user is locked`;
+                  res.render("new-recipe.ejs",{errorMessage:errorMessage});
             }
 
 
@@ -231,12 +238,17 @@ app.get("/new-recipe", (req,res)=>{
 
 app.post("/get_recipe/:id", async(req,res)=>{
       let recipeID = req.params.id
+      console.log(recipeID)
       try {
             const instructionsResult = await db.query("SELECT recipes.recipe_name, recipes.recipe_id, instructions.instruction,instructions.instruction_id FROM recipes INNER JOIN instructions on recipes.recipe_id = instructions.recipe_id WHERE instructions.recipe_id = $1 ORDER BY instructions.instruction_id", [recipeID])
             const instructions =  instructionsResult.rows
 
+            console.log("instructions are", instructions)
+
             const ingredientsResult = await db.query("SELECT recipes.recipe_name, ingredients.ingredient_name, ingredients.quantity, ingredients.ingredient_id FROM recipes INNER JOIN ingredients on recipes.recipe_id = ingredients.recipe_id WHERE ingredients.recipe_id = $1 ORDER BY ingredients.ingredient_id", [recipeID] )
             const ingredients = ingredientsResult.rows
+
+            console.log(instructions[0])
 
             res.render("index.ejs", {instructions:instructions, ingredients:ingredients, recipes:recipes})
       } catch (error) {
@@ -253,8 +265,8 @@ app.post("/edit", async (req,res)=>{
       const column = req.body.column;
       let idCol
 
-            if(siteAccess){
-                if(table == "ingredients"){
+      if(siteAccess){
+            if(table == "ingredients"){
             idCol = "ingredient_id"
       }else{
             idCol = "instruction_id"
@@ -268,13 +280,11 @@ app.post("/edit", async (req,res)=>{
             res.redirect("/")
       } catch (error) {
             console.log(error)
-            res.send("error updating recipe")
       }  
             }else{
-                  res.send("user blocked")
+                  errorMessage = `Recipe not updated, user is locked`
+                  res.render("new-recipe.ejs",{errorMessage:errorMessage})
             }
-      
-
 
       
 })
