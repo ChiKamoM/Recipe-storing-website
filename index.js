@@ -283,7 +283,7 @@ app.post("/edit", async (req,res)=>{
       }  
             }else{
                   errorMessage = `Recipe not updated, user is locked`
-                  res.render("new-recipe.ejs",{errorMessage:errorMessage})
+                  res.render("index.ejs",{errorMessage:errorMessage})
             }
 
       
