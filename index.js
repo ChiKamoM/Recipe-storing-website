@@ -25,12 +25,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended:true }));
 
 
-let loggedIn ;
-let currentUser; 
-let recipes
-let userType
-let siteAccess
-let errorMessage
+
 
 
 app.listen(port, ()=>{
@@ -38,15 +33,6 @@ app.listen(port, ()=>{
 })
 
 
-app.get("/admin", async (req,res)=>{
-                  let result = await db.query("SELECT name, email, uuid, account_role FROM users")
-            console.log(result.rows)
-            const users = result.rows
-            
-
-
-            res.render("admin.ejs",{users:users})
-})
 
 app.get("/", async (req,res)=>{
 
@@ -72,51 +58,13 @@ app.get("/", async (req,res)=>{
       
 })
 
-app.get("/adminView", async (req,res)=>{
-      if(currentUser == "admin"){
-
-            let result = await db.query("SELECT name, email, uuid, account_role FROM users")
-            console.log(result.rows)
-            const users = result.rows
-            
-
-
-            res.render("admin.ejs",{users:users})
-      }else{
-           res.redirect("/")
-      }
-})
 
 app.post("/register", async (req,res)=>{
       const {name,email, password} = req.body;
       let role
       let uuid = uuidv4().slice(0,4)
 
-      if(password == process.env.ADMIN_CODE){
-            role = "admin"
-
-            try {
-                  let result = await db.query("SELECT * FROM users WHERE email = $1", [email])
-                  console.log(result.rows)
-                  if(result.rows < 1){
-                   const hash = await bcrypt.hash(password, saltRounds)
-                        result = await db.query("INSERT INTO users (uuid,name,email,password,account_role) VALUES ($1,$2,$3,$4,$5)",[uuid,name,email,hash,role])
-                        console.log(result)
-
-                        res.render("login.ejs");
-                  } else{
-                   
-                  errorMessage = `User ${email} already exists. Try logging in`
-                  
-                  res.render("register.ejs",{errorMessage:errorMessage})
-                  }        
-            } catch (error) {
-                  console.log(error)
-                  res.redirect("/")            
-            }
-      }else{
-            role = "user"
-            try {
+      try {
                   let result = await db.query("SELECT * FROM users WHERE email = $1", [email])
                   console.log(result.rows)
                   if(result.rows < 1){
@@ -138,7 +86,6 @@ app.post("/register", async (req,res)=>{
                   res.redirect("/")
             
             }
-      }
 
       
 })
