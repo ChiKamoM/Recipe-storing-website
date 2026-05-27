@@ -1,0 +1,11 @@
+//RECIPE QUERIES
+      //CREATE RECIPE 
+      //UPDATE RECIPE
+      //DELETE RECIPE
+      //READ RECIPES (BASED ON USER)
+
+
+
+//USER QUERIES
+      //CREATE  USER
+      //
