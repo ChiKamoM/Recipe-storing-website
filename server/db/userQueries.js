@@ -23,8 +23,7 @@ const userQueries = {
             const result = await pool.query('INSERT INTO users (email,password_hash,name,uuid) VALUES ($1,$2,$3,$4) RETURNING *',[userEmail,passwordHash,name,uuid]);
             return result.rows;
       }
-
-        
+    
 }
 
 export default userQueries
